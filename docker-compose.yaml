@@ -1,0 +1,33 @@
+services:
+  mysql:
+    image: mysql:5.7
+    networks:
+      - python
+    volumes:
+      - python_mysql:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    expose:
+      - 3306
+  python:
+    image: 337533868044.dkr.ecr.ap-south-1.amazonaws.com/python:new
+    depends_on:
+      - mysql
+    networks:
+     - python
+    ports:
+      - 5000:5000
+    restart: always
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_NAME=${DB_NAME}
+volumes:
+  python_mysql:
+networks:
+  python:
